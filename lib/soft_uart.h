@@ -1,5 +1,5 @@
-#ifndef _nRF24AP1_H_
-#define _nRF24AP1_H_
+#ifndef _SOFT_UART_H_
+#define _SOFT_UART_H_
 
 
 #define SOFTUART_BAUD_RATE      4800

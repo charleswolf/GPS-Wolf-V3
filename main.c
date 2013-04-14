@@ -89,7 +89,21 @@ int main(void)
 	
 	//allow time for power to stabilize
 	_delay_ms(1000);
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/********************Temporaily Disable GPS*****************************	
 	//initialize hardware
 	init_sdcard(0);
 	USARTInit(MYUBRR);
@@ -114,6 +128,7 @@ int main(void)
 	path_index = sd_new_pathfile( &path_file[0] );
 	
 	//Make sure a SD card was inserted before moving on
+	//If a the SD card is not present, wait 1 second and check again
 	while ( sd_check_file( &path_file[0] ) != FR_OK )
 	{
 		//try to create a pathfile 
@@ -180,25 +195,25 @@ int main(void)
 						i++;
 					}   
 					
-					/* GPGGA message breakdown
-					 *  0 - message id
-					 *  1 - UTC Time
-					 *  2 - Latitude ddmm.mmmm
-					 *  3 - N/S indicator
-					 *  4 - Longitude dddmm.mmmm
-					 *  5 - E/W indicator
-					 *  6 - Position fix indicator
-					 *  7 - satelites used
-					 *  8 - HDOP Horizontal Dillution of Precision
-					 *  9 - MLS Altitude 
-					 *  10- MLS Altitude units
-					 *  11- Geoid Spearation 
-					 *  12- Geoid Separation units
-					 *  13- Age of Diff. Corr (seconds)
-					 *  14- Diff. Ref. Station
-					 *  15- Checksum (dont include $)
-					 *  16- <CR><LF> 
-					 */
+					// GPGGA message breakdown
+					//  0 - message id
+					//  1 - UTC Time
+					//  2 - Latitude ddmm.mmmm
+					//  3 - N/S indicator
+					//  4 - Longitude dddmm.mmmm
+					//  5 - E/W indicator
+					//  6 - Position fix indicator
+					//  7 - satelites used
+					//  8 - HDOP Horizontal Dillution of Precision
+					//  9 - MLS Altitude 
+					//  10- MLS Altitude units
+					//  11- Geoid Spearation 
+					//  12- Geoid Separation units
+					//  13- Age of Diff. Corr (seconds)
+					//  14- Diff. Ref. Station
+					//  15- Checksum (dont include $)
+					//  16- <CR><LF> 
+					
 					
 					//update the data if needed
 					 if (date_check < 1) //get the date
@@ -417,4 +432,6 @@ int main(void)
 	}
 }
 
+***********************************************************************/
 
+test
