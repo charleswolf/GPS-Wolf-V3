@@ -1,4 +1,4 @@
-#include "sdcard.h"
+#include "nRF24AP1.h"
 
 /**CHANGE LOG
  * -----------------------  
@@ -6,15 +6,4 @@
  * -----------------------
 */
 
-/**
-* Name : 
-*
-* Description: 
-*
-* Author(s): Charles Wolf
-*
-* @param: 
-*
-* @return: 
-**/
 
