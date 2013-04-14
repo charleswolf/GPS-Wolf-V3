@@ -55,28 +55,28 @@ int main(void)
 { 
 	//define variables
 	char path_file[30];
-	char data_string[102];	//contains the gps module messages
-	char rmc_string[102];
-	char *msgs[20];			//contains pointers to parts of the gpgga message
-	char *RMC_msgs[15];		//contains pointers to parts of the gprmc message
-	char tmp[15];			//temporary string buffer
-	char *p , *l;
-	char footer[] = "</trkseg></trk></gpx>";
-	int footer_len = 21;
-	int rmc_items = 0;
-	int date_start = 0;
-	uint32_t longitude_minutes = 0;
-	uint32_t longitude_minutes_past = 0;
-	uint32_t latitude_minutes = 0;
-	uint32_t latitude_minutes_past = 0;
+//	char data_string[102];	//contains the gps module messages
+//	char rmc_string[102];
+//	char *msgs[20];			//contains pointers to parts of the gpgga message
+//	char *RMC_msgs[15];		//contains pointers to parts of the gprmc message
+//	char tmp[15];			//temporary string buffer
+//	char *p , *l;
+//	char footer[] = "</trkseg></trk></gpx>";
+//	int footer_len = 21;
+//	int rmc_items = 0;
+//	int date_start = 0;
+//	uint32_t longitude_minutes = 0;
+//	uint32_t longitude_minutes_past = 0;
+//	uint32_t latitude_minutes = 0;
+//	uint32_t latitude_minutes_past = 0;
 	uint8_t path_index = 0;	//number appended to path filename
-	uint8_t date_check = 0;
-	char RMC_year[6] = "11"; 
-	char RMC_month[6] = "10";
-	char RMC_day[6] = "15";
-	unsigned int i = 0;
-	int no_lock_error= 1;	//dont flag startup errors
-	int duplicate_error = 0;
+//	uint8_t date_check = 0;
+//	char RMC_year[6] = "11"; 
+//	char RMC_month[6] = "10";
+//	char RMC_day[6] = "15";
+//	unsigned int i = 0;
+//	int no_lock_error= 1;	//dont flag startup errors
+//	int duplicate_error = 0;
 	
 	
 	//reference un-used pins 
@@ -84,8 +84,8 @@ int main(void)
 	PORTB 	&= !((1<<PB0) | (1<<PB1) | (1<<PB6) | (1<<PB7));
 	DDRC 	|= 0xFF;	//all output
 	PORTC 	&= 0x00;	//all low
-	DDRD	|= (1<<PD2) | (1<<PD3) | (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
-	PORTD	&= !((1<<PD2) | (1<<PD3) | (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7));
+	//DDRD	|= (1<<PD2) | (1<<PD3) | (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7);
+	//PORTD	&= !((1<<PD2) | (1<<PD3) | (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7));
 	
 	//allow time for power to stabilize
 	_delay_ms(1000);
@@ -106,16 +106,19 @@ int main(void)
 	//check status of SD card
 	if ( sd_check_file( &path_file[0] ) == FR_OK )
 	{	
-	//open file
-	sdcard_open( &path_file[0] );
-					
-	//move to the end of the file
-	f_lseek(&logFile, f_size(&logFile));
-	
-	//write things to the file
+		//open file
+		sdcard_open( &path_file[0] );
+						
+		//move to the end of the file
+		f_lseek(&logFile, f_size(&logFile));
+		
+		//write things to the file
 
-	//close the file
-	sdcard_close();
+		//close the file
+		sdcard_close();
+	}
+return 1;
+}
 
 
 
