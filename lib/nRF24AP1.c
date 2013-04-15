@@ -245,7 +245,7 @@ void open_channel(void)
 }
 
 
-void config (void)
+void ant_hr_config(void)
 {
 	reset();
 	_delay_ms(100);

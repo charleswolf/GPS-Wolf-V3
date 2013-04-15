@@ -203,7 +203,7 @@ void timeout(void);
 void frequency(void);
 void channel_period(void);
 void open_channel(void);
-void config (void);
+void ant_hr_config(void);
 
 
 

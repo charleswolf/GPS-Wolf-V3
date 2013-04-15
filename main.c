@@ -117,6 +117,7 @@ int main(void)
 		//Do Stuff & write things to the file
 		
 		nRF24AP1_init();
+		ant_hr_config();
 		
 
 		//close the file
