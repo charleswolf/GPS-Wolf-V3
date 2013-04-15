@@ -178,17 +178,15 @@
 #define NET1      1
 #define TIMEOUT   10
 
+//Garmin specific configurations
 #define FREQ 			0x39; //  garmin radio frequency
 #define PERIOD      	0x1f86; // Garmin search period
 #define NETWORK_KEY		"KEY GOES HERE" // Garmin HRM
 
+//Suunto specific configurations
 #define Suunto_FREQ			0x41;   // Suunto radio frequency
 #define Suunto_PERIOD		0x199a; // Suunto search period
 #define Suunto_NETWORK_KEY	"KEY GOES HERE" // Suunto HRM
-
-
-
-
 
 
 void nRF24AP1_init( void );
@@ -204,8 +202,5 @@ void frequency(void);
 void channel_period(void);
 void open_channel(void);
 void ant_hr_config(void);
-
-
-
 
 #endif
