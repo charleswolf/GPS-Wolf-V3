@@ -47,3 +47,227 @@ void nRF24AP1_init()
 
 
 
+UCHAR checkSum(UCHAR *data, int length)
+{
+	int i;
+	UCHAR chksum = data[0];
+
+	for (i = 1; i < length; i++)
+	{
+		chksum ^= data[i];  // +1 since skip prefix sync code, we already counted it
+	}
+	
+	return chksum;
+}
+
+
+
+void reset (void)
+{
+   uint8_t i;
+	uint8_t buf[4];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x01; // LENGTH Byte
+	buf[2] = MESG_SYSTEM_RESET_ID; // ID Byte
+	buf[3] = 0x00; // Data Byte N (N=LENGTH)
+	buf[4] = checkSum(buf,4);
+	for(i = 0 ; i < 5 ; i++)
+	{
+		//send message byte by byte
+	}
+
+}
+
+
+void assignch(void)
+{
+	uint8_t i;
+	uint8_t buf[5];
+
+	buf[0] = MESG_TX_SYNC;
+	buf[1] = 0x02; 	// length
+	buf[2] = MESG_REQUEST_ID;
+	buf[3] = CHAN0; 
+	buf[4] = MESG_CAPABILITIES_ID; 
+	buf[5] = checkSum(buf,5);
+	for(i = 0 ; i < 6 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+void assignch1(void)
+{
+	uint8_t i;
+	uint8_t buf[5];
+
+	buf[0] = MESG_TX_SYNC;
+	buf[1] = 0x02; // LENGTH 
+	buf[2] = MESG_REQUEST_ID;
+	buf[3] = CHAN0; 
+	buf[4] = ((UCHAR)0x3D); 
+	buf[5] = checkSum(buf,5);
+	for(i = 0 ; i < 6 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+void assignch2(void)
+{
+	uint8_t i;
+	uint8_t buf[6];
+
+	buf[0] = MESG_TX_SYNC;
+	buf[1] = 0x03; // LENGTH 
+	buf[2] = MESG_ASSIGN_CHANNEL_ID; 
+	buf[3] = CHAN0;
+	buf[4] = ((UCHAR)0x00); 
+	buf[5] = NET0; 
+	buf[6] = checkSum(buf,6);
+	for(i = 0 ; i < 7 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+
+void assignch3(void)
+{
+	uint8_t i;
+	uint8_t buf[8];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x05; // LENGTH Byte
+	buf[2] = MESG_CHANNEL_ID_ID; // ID Byte
+	buf[3] = CHAN0;
+	//device number (little-endian)
+	buf[4] = ((UCHAR)0x00); //0 = wildcard
+	buf[5] = ((UCHAR)0x00);	
+	//device type
+	buf[6] = ((UCHAR)0x00); //0 = wildcard
+	//ID
+	buf[7] = ((UCHAR)0x00); //0 = wildcard
+	buf[8] = checkSum(buf,8);
+	for(i = 0 ; i < 9 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+void assignch4(void)
+{
+	uint8_t i;
+	uint8_t buf[12];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x09; // LENGTH Byte
+	buf[2] = MESG_NETWORK_KEY_ID; // ID Byte
+	buf[3] = NET0;
+	//hstr2hex(&buf[4], NETWORK_KEY, 16);  // dest, orig, size
+	buf[12] = checkSum(buf,12);
+	for(i = 0 ; i < 13 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+
+void timeout(void)
+{
+	uint8_t i;
+	uint8_t buf[5];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x02; // LENGTH Byte
+	buf[2] = MESG_CHANNEL_SEARCH_TIMEOUT_ID; // ID Byte
+	buf[3] = CHAN0;
+	buf[4] = TIMEOUT; 
+	buf[5] = checkSum(buf,5);
+	for(i = 0 ; i < 6 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+
+void frequency(void)
+{
+	uint8_t i;
+	uint8_t buf[5];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x02; // LENGTH Byte
+	buf[2] = MESG_CHANNEL_RADIO_FREQ_ID; // ID Byte
+	buf[3] = CHAN0;
+	buf[4] = FREQ; 
+	buf[5] = checkSum(buf,5);
+	for(i = 0 ; i < 6 ; i++)
+	{
+		//send message byte by byte
+	}
+}
+
+void channel_period(void)
+{
+	uint8_t i;
+	uint8_t buf[6];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x03; // LENGTH Byte
+	buf[2] = MESG_CHANNEL_MESG_PERIOD_ID; // ID Byte
+	buf[3] = CHAN0;
+	//Period (little-endian)
+	buf[4] = 0x1f; //mikec   buf[4] = 0x9A;  
+	buf[5] = 0x86; //mikec   buf[5] = 0x19;  //   6554 = 25*256 + 154; 25=0x19; 154 = 0x9A
+	buf[6] = checkSum(buf,6);
+	for(i = 0 ; i < 7 ; i++)
+	{
+
+	}
+}
+
+void open_channel(void)
+{
+	uint8_t i;
+	uint8_t buf[4];
+
+	buf[0] = MESG_TX_SYNC; // SYNC Byte
+	buf[1] = 0x01; // LENGTH Byte
+	buf[2] = MESG_OPEN_CHANNEL_ID; // ID Byte
+	buf[3] = CHAN0;
+	buf[4] = checkSum(buf,4);
+	for(i = 0 ; i < 5 ; i++)
+	{
+
+	}
+}
+
+
+void config (void)
+{
+	reset();
+	_delay_ms(100);
+	assignch();
+	_delay_ms(1000);
+	assignch1();
+	_delay_ms(100);
+	assignch2();
+	_delay_ms(100);
+	assignch3();
+	_delay_ms(100);
+	assignch4();
+	_delay_ms(20);
+	timeout();
+	_delay_ms(20);
+	frequency();
+	_delay_ms(20);
+	channel_period();
+	_delay_ms(20);
+	open_channel();
+	_delay_ms(20);
+}
+
+
+

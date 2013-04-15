@@ -48,6 +48,7 @@ unsigned int bytesWritten;
 
 #include "lib/sdcard.c"
 #include "lib/uart.c"
+#include "lib/nRF24AP1.c"
 
 
 //Main
@@ -69,7 +70,7 @@ int main(void)
 //	uint32_t longitude_minutes_past = 0;
 //	uint32_t latitude_minutes = 0;
 //	uint32_t latitude_minutes_past = 0;
-	uint8_t path_index = 0;	//number appended to path filename
+//	uint8_t path_index = 0;	//number appended to path filename
 //	uint8_t date_check = 0;
 //	char RMC_year[6] = "11"; 
 //	char RMC_month[6] = "10";
@@ -91,7 +92,7 @@ int main(void)
 	_delay_ms(1000);
 
 
-	path_index = sd_new_pathfile( &path_file[0] );
+	sd_new_pathfile( &path_file[0] );
 	
 	//Make sure a SD card was inserted before moving on
 	//If a the SD card is not present, wait 1 second and check again
@@ -99,7 +100,8 @@ int main(void)
 	{
 		//try to create a pathfile 
 		init_sdcard(0);
-		path_index = sd_new_pathfile( &path_file[0] );
+		//path_index = sd_new_pathfile( &path_file[0] );
+		sd_new_pathfile( &path_file[0] );
 		_delay_ms(1000);
 	}
 
@@ -112,7 +114,10 @@ int main(void)
 		//move to the end of the file
 		f_lseek(&logFile, f_size(&logFile));
 		
-		//write things to the file
+		//Do Stuff & write things to the file
+		
+		nRF24AP1_init();
+		
 
 		//close the file
 		sdcard_close();

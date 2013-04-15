@@ -5,6 +5,15 @@
 	#define UCHAR unsigned char
 #endif
 
+#ifndef TRUE
+	#define TRUE	1
+#endif
+
+#ifndef FALSE
+	#define FALSE 0
+#endif
+
+
 //Define the pins used for the nRF24AP1
 #define nRF24AP1_DIRECTION		DDRD
 #define nRF24AP1_PORT			PORTD
@@ -161,5 +170,42 @@
 #define MESG_RSSI_SIZE                    ((UCHAR)3)
 #define MESG_RSSI_DATA_SIZE               ((UCHAR)17)
 #define MESG_RSSI_SEARCH_THRESHOLD_SIZE   ((UCHAR)2)
+
+
+#define CHAN0      0
+#define CHAN1      1
+#define NET0      0
+#define NET1      1
+#define TIMEOUT   10
+
+#define FREQ 			0x39; //  garmin radio frequency
+#define PERIOD      	0x1f86; // Garmin search period
+#define NETWORK_KEY		"KEY GOES HERE" // Garmin HRM
+
+#define Suunto_FREQ			0x41;   // Suunto radio frequency
+#define Suunto_PERIOD		0x199a; // Suunto search period
+#define Suunto_NETWORK_KEY	"KEY GOES HERE" // Suunto HRM
+
+
+
+
+
+
+void nRF24AP1_init( void );
+UCHAR checkSum(UCHAR *data, int length);
+void reset (void);
+void assignch(void);
+void assignch1(void);
+void assignch2(void);
+void assignch3(void);
+void assignch4(void);
+void timeout(void);
+void frequency(void);
+void channel_period(void);
+void open_channel(void);
+void config (void);
+
+
+
 
 #endif
