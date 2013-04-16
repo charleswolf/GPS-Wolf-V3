@@ -66,7 +66,7 @@ UCHAR checkSum(UCHAR *data, int length)
 void reset (void)
 {
    uint8_t i;
-	uint8_t buf[4];
+	uint8_t buf[5];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x01; // LENGTH Byte
@@ -84,7 +84,7 @@ void reset (void)
 void assignch(void)
 {
 	uint8_t i;
-	uint8_t buf[5];
+	uint8_t buf[6];
 
 	buf[0] = MESG_TX_SYNC;
 	buf[1] = 0x02; 	// length
@@ -101,7 +101,7 @@ void assignch(void)
 void assignch1(void)
 {
 	uint8_t i;
-	uint8_t buf[5];
+	uint8_t buf[6];
 
 	buf[0] = MESG_TX_SYNC;
 	buf[1] = 0x02; // LENGTH 
@@ -118,7 +118,7 @@ void assignch1(void)
 void assignch2(void)
 {
 	uint8_t i;
-	uint8_t buf[6];
+	uint8_t buf[7];
 
 	buf[0] = MESG_TX_SYNC;
 	buf[1] = 0x03; // LENGTH 
@@ -137,7 +137,7 @@ void assignch2(void)
 void assignch3(void)
 {
 	uint8_t i;
-	uint8_t buf[8];
+	uint8_t buf[9];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x05; // LENGTH Byte
@@ -160,7 +160,7 @@ void assignch3(void)
 void assignch4(void)
 {
 	uint8_t i;
-	uint8_t buf[12];
+	uint8_t buf[13];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x09; // LENGTH Byte
@@ -178,7 +178,7 @@ void assignch4(void)
 void timeout(void)
 {
 	uint8_t i;
-	uint8_t buf[5];
+	uint8_t buf[6];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x02; // LENGTH Byte
@@ -196,7 +196,7 @@ void timeout(void)
 void frequency(void)
 {
 	uint8_t i;
-	uint8_t buf[5];
+	uint8_t buf[6];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x02; // LENGTH Byte
@@ -213,7 +213,7 @@ void frequency(void)
 void channel_period(void)
 {
 	uint8_t i;
-	uint8_t buf[6];
+	uint8_t buf[7];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x03; // LENGTH Byte
@@ -232,7 +232,7 @@ void channel_period(void)
 void open_channel(void)
 {
 	uint8_t i;
-	uint8_t buf[4];
+	uint8_t buf[5];
 
 	buf[0] = MESG_TX_SYNC; // SYNC Byte
 	buf[1] = 0x01; // LENGTH Byte

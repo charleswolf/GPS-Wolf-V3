@@ -104,12 +104,24 @@ int main(void)
 		sd_new_pathfile( &path_file[0] );
 		_delay_ms(1000);
 	}
+	
+	sdcard_open ( "debug.txt" ); // open debug file
+	f_lseek ( &logFile, f_size(&logFile));//move to last line
+	f_write(&logFile, "new pathfile created", 20, & bytesWritten);
+	f_write(&logFile, "\n", 1, &bytesWritten);//next line
+	f_close(&logFile);//close file
 
 	//check status of SD card
 	if ( sd_check_file( &path_file[0] ) == FR_OK )
 	{	
 		//open file
 		sdcard_open( &path_file[0] );
+		
+		sdcard_open ( "debug.txt" ); // open debug file
+		f_lseek ( &logFile, f_size(&logFile));//move to last line
+		f_write(&logFile, "pathfile open", 13, & bytesWritten);
+		f_write(&logFile, "\n", 1, &bytesWritten);//next line
+		f_close(&logFile);//close file
 						
 		//move to the end of the file
 		f_lseek(&logFile, f_size(&logFile));
@@ -119,6 +131,11 @@ int main(void)
 		nRF24AP1_init();
 		ant_hr_config();
 		
+		sdcard_open ( "debug.txt" ); // open debug file
+		f_lseek ( &logFile, f_size(&logFile));//move to last line
+		f_write(&logFile, "configured", 10, & bytesWritten);
+		f_write(&logFile, "\n", 1, &bytesWritten);//next line
+		f_close(&logFile);//close file
 
 		//close the file
 		sdcard_close();
