@@ -1,4 +1,5 @@
 #include "nRF24AP1.h"
+#include "soft_uart.c"
 
 /**CHANGE LOG
  * 4-14-2013 - Added initalization 
@@ -74,7 +75,7 @@ void reset (void)
 	buf[4] = checkSum(buf,4);
 	for(i = 0 ; i < 5 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 
 }
@@ -93,7 +94,7 @@ void assignch(void)
 	buf[5] = checkSum(buf,5);
 	for(i = 0 ; i < 6 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -110,7 +111,7 @@ void assignch1(void)
 	buf[5] = checkSum(buf,5);
 	for(i = 0 ; i < 6 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -128,7 +129,7 @@ void assignch2(void)
 	buf[6] = checkSum(buf,6);
 	for(i = 0 ; i < 7 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -152,7 +153,7 @@ void assignch3(void)
 	buf[8] = checkSum(buf,8);
 	for(i = 0 ; i < 9 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -169,7 +170,7 @@ void assignch4(void)
 	buf[12] = checkSum(buf,12);
 	for(i = 0 ; i < 13 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -187,7 +188,7 @@ void timeout(void)
 	buf[5] = checkSum(buf,5);
 	for(i = 0 ; i < 6 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -205,7 +206,7 @@ void frequency(void)
 	buf[5] = checkSum(buf,5);
 	for(i = 0 ; i < 6 ; i++)
 	{
-		//send message byte by byte
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -224,7 +225,7 @@ void channel_period(void)
 	buf[6] = checkSum(buf,6);
 	for(i = 0 ; i < 7 ; i++)
 	{
-
+		softuart_putchar(buf[i]);
 	}
 }
 
@@ -240,7 +241,7 @@ void open_channel(void)
 	buf[4] = checkSum(buf,4);
 	for(i = 0 ; i < 5 ; i++)
 	{
-
+		softuart_putchar(buf[i]);
 	}
 }
 
