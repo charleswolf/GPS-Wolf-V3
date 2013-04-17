@@ -122,14 +122,43 @@ int main(void)
 		f_write(&logFile, "pathfile open", 13, & bytesWritten);
 		f_write(&logFile, "\n", 1, &bytesWritten);//next line
 		f_close(&logFile);//close file
-						
-		//move to the end of the file
-		f_lseek(&logFile, f_size(&logFile));
 		
-		//Do Stuff & write things to the file
 		
 		nRF24AP1_init();
-		ant_hr_config();
+		softuart_init();
+		
+		sdcard_open ( "debug.txt" ); // open debug file
+		f_lseek ( &logFile, f_size(&logFile));//move to last line
+		f_write(&logFile, "softuart_init", 13, & bytesWritten);
+		f_write(&logFile, "\n", 1, &bytesWritten);//next line
+		f_close(&logFile);//close file
+		
+		reset();
+		
+		f_lseek ( &logFile, f_size(&logFile));//move to last line
+		f_write(&logFile, "reset", 15, & bytesWritten);
+		f_write(&logFile, "\n", 1, &bytesWritten);//next line
+		f_close(&logFile);//close file
+		
+		_delay_ms(100);
+		assignch();
+		_delay_ms(1000);
+		assignch1();
+		_delay_ms(100);
+		assignch2();
+		_delay_ms(100);
+		assignch3();
+		_delay_ms(100);
+		assignch4();
+		_delay_ms(20);
+		timeout();
+		_delay_ms(20);
+		frequency();
+		_delay_ms(20);
+		channel_period();
+		_delay_ms(20);
+		open_channel();
+		_delay_ms(20);
 		
 		sdcard_open ( "debug.txt" ); // open debug file
 		f_lseek ( &logFile, f_size(&logFile));//move to last line

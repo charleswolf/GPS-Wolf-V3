@@ -63,7 +63,7 @@ UCHAR checkSum(UCHAR *data, int length)
 
 
 
-void reset (void)
+void reset(void)
 {
    uint8_t i;
 	uint8_t buf[5];

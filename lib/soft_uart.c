@@ -142,6 +142,7 @@ void softuart_init( void )
 	// timer_set( BAUD_RATE );
 	// set_timer_interrupt( timer_isr );
 	avr_timer_init(); // replaces the two calls above
+	sei();//enable interrupts
 }
 
 static void idle(void)
