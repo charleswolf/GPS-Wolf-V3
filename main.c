@@ -78,7 +78,7 @@ int main(void)
 //	unsigned int i = 0;
 //	int no_lock_error= 1;	//dont flag startup errors
 //	int duplicate_error = 0;
-	
+	  
 	
 	//reference un-used pins 
 	DDRB 	|= (1<<PB0) | (1<<PB1) | (1<<PB6) | (1<<PB7);
@@ -89,7 +89,7 @@ int main(void)
 	//PORTD	&= !((1<<PD2) | (1<<PD3) | (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7));
 	
 	//allow time for power to stabilize
-	_delay_ms(1000);
+	_delay_ms(1001);
 
 
 	sd_new_pathfile( &path_file[0] );

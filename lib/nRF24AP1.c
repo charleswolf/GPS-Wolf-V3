@@ -29,9 +29,9 @@ void nRF24AP1_init()
 	nRF24AP1_DIRECTION	|= ((1<<nRF24AP1_RESET_PIN) 
 						| (1<<nRF24AP1_RTS_PIN)
 						| (1<<nRF24AP1_SLEEP_PIN)
-						| (1<<nRF24AP1_SUSPEND_PIN)
-						| (1<<nRF24AP1_TX_PIN)
-						);
+						//| (1<<nRF24AP1_SUSPEND_PIN)
+						|(1<<DDD3)
+						| (1<<nRF24AP1_TX_PIN));
 	nRF24AP1_DIRECTION &= !(1<<nRF24AP1_RX_PIN);					
 						
 	//Configure Outputs
@@ -43,6 +43,9 @@ void nRF24AP1_init()
 	nRF24AP1_PORT &= !(1<<nRF24AP1_RESET_PIN);
 	_delay_ms(100);
 	nRF24AP1_PORT |= (1<<nRF24AP1_RESET_PIN);
+	
+	nRF24AP1_PORT |= (1<<nRF24AP1_SUSPEND_PIN);
+	nRF24AP1_PORT &= !(1<<nRF24AP1_SLEEP_PIN);
 	
 }
 
@@ -268,56 +271,5 @@ void ant_hr_config(void)
 	_delay_ms(20);
 	open_channel();
 	_delay_ms(20);
-}
-
-int ANT_rxHandler()
-{
-	int n, fd, rc, inmsg = FALSE;
-	UCHAR chr, msgN;
-	
-	softuart_flush_input_buffer();
-	softuart_turn_rx_on();
-
-	while (mySerial.available()>0)
-	{
-		chr = mySerial.read();
-		if (chr != -1)
-		{
-			if ((chr == MESG_TX_SYNC) && (inmsg == FALSE))
-			{
-				msgN = 0; // Always reset msg count if we get a sync
-				inmsg = TRUE;
-
-				rxBuf[msgN] = chr; // second byte will be msg size
-				msgN++;                   
-			}
-			else if (msgN == 1)
-			{
-				rxBuf[msgN] = chr; // second byte will be msg siz
-				msgN++;
-			}
-			else if (msgN == 2)
-			{
-				rxBuf[msgN] = chr;
-				msgN++;
-			}
-			else if (msgN < rxBuf[1]+3) // sync, size, checksum x 1 byte
-			{           
-				rxBuf[msgN] = chr;
-				msgN++;           
-			}
-			else
-			{
-				inmsg = FALSE;
-				rxBuf[msgN] = chr;
-
-				if (checkSum(rxBuf, msgN) == rxBuf[msgN]) // Check if chksum = msg chksu
-				{           
-					ANT_rxMsg();
-				}
-			}
-		}
-	}//end while
-	softuart_turn_rx_off();
 }
 

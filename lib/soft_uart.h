@@ -2,7 +2,6 @@
 #ifndef _SOFT_UART_H_
 #define _SOFT_UART_H_
 
-
 #define SOFTUART_BAUD_RATE      4800
 
 #define SOFTUART_RXPIN   PIND
@@ -11,7 +10,7 @@
 
 #define SOFTUART_TXPORT  PORTD
 #define SOFTUART_TXDDR   DDRD
-#define SOFTUART_TXBIT   PB7
+#define SOFTUART_TXBIT   PD6
 
 #define SOFTUART_T_COMP_LABEL      TIMER0_COMPA_vect
 #define SOFTUART_T_COMP_REG        OCR0A
