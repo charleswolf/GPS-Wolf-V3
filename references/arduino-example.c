@@ -524,6 +524,7 @@
        int n, fd, rc, inmsg = FALSE;
        UCHAR chr, msgN;
        
+       
        while (mySerial.available()>0)
        {
           chr = mySerial.read();
