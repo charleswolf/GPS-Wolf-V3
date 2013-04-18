@@ -92,18 +92,18 @@ int main(void)
 	_delay_ms(1001);
 
 
-	sd_new_pathfile( &path_file[0] );
+	//sd_new_pathfile( &path_file[0] );
 	
 	//Make sure a SD card was inserted before moving on
 	//If a the SD card is not present, wait 1 second and check again
-	while ( sd_check_file( &path_file[0] ) != FR_OK )
-	{
+	//while ( sd_check_file( &path_file[0] ) != FR_OK )
+	//{
 		//try to create a pathfile 
-		init_sdcard(0);
+	//	init_sdcard(0);
 		//path_index = sd_new_pathfile( &path_file[0] );
-		sd_new_pathfile( &path_file[0] );
-		_delay_ms(1000);
-	}
+	//	sd_new_pathfile( &path_file[0] );
+	//	_delay_ms(1000);
+	//}
 	
 	sdcard_open ( "debug.txt" ); // open debug file
 	f_lseek ( &logFile, f_size(&logFile));//move to last line
@@ -112,8 +112,8 @@ int main(void)
 	f_close(&logFile);//close file
 
 	//check status of SD card
-	if ( sd_check_file( &path_file[0] ) == FR_OK )
-	{	
+//	if ( sd_check_file( &path_file[0] ) == FR_OK )
+//	{	
 		//open file
 		sdcard_open( &path_file[0] );
 		
@@ -137,7 +137,7 @@ int main(void)
 
 		//close the file
 		sdcard_close();
-	}
+//	}
 return 1;
 }
 
