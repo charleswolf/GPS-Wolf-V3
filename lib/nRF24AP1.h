@@ -189,9 +189,9 @@
 #define Suunto_NETWORK_KEY	"KEY GOES HERE" // Suunto HRM
 
 
-void nRF24AP1_init( void );
+void nRF24AP1_init(void);
 UCHAR checkSum(UCHAR *data, int length);
-void reset (void);
+void reset_msg(void);
 void assignch(void);
 void assignch1(void);
 void assignch2(void);

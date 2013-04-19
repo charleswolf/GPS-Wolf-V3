@@ -14,6 +14,12 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	A good reference:
+	http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_use_bv
+
+
+
 */
 
 #define F_CPU 8000000UL //8 MHz Internal Oscillator 
@@ -89,55 +95,22 @@ int main(void)
 	//PORTD	&= !((1<<PD2) | (1<<PD3) | (1<<PD4) | (1<<PD5) | (1<<PD6) | (1<<PD7));
 	
 	//allow time for power to stabilize
-	_delay_ms(1001);
-
-
-	//sd_new_pathfile( &path_file[0] );
+	_delay_ms(1000);
 	
-	//Make sure a SD card was inserted before moving on
-	//If a the SD card is not present, wait 1 second and check again
-	//while ( sd_check_file( &path_file[0] ) != FR_OK )
-	//{
-		//try to create a pathfile 
-	//	init_sdcard(0);
-		//path_index = sd_new_pathfile( &path_file[0] );
-	//	sd_new_pathfile( &path_file[0] );
-	//	_delay_ms(1000);
-	//}
-	
+	softuart_init();	
+	nRF24AP1_init();
+	ant_hr_config();
+
+	/*
 	sdcard_open ( "debug.txt" ); // open debug file
 	f_lseek ( &logFile, f_size(&logFile));//move to last line
-	f_write(&logFile, "new pathfile created", 20, & bytesWritten);
+	f_write(&logFile, "configured", 10, & bytesWritten);
 	f_write(&logFile, "\n", 1, &bytesWritten);//next line
 	f_close(&logFile);//close file
+	*/
+		
+	while(1);
 
-	//check status of SD card
-//	if ( sd_check_file( &path_file[0] ) == FR_OK )
-//	{	
-		//open file
-		sdcard_open( &path_file[0] );
-		
-		sdcard_open ( "debug.txt" ); // open debug file
-		f_lseek ( &logFile, f_size(&logFile));//move to last line
-		f_write(&logFile, "pathfile open", 13, & bytesWritten);
-		f_write(&logFile, "\n", 1, &bytesWritten);//next line
-		f_close(&logFile);//close file
-		
-		
-		nRF24AP1_init();
-		softuart_init();
-		ant_hr_config();
-
-		
-		sdcard_open ( "debug.txt" ); // open debug file
-		f_lseek ( &logFile, f_size(&logFile));//move to last line
-		f_write(&logFile, "configured", 10, & bytesWritten);
-		f_write(&logFile, "\n", 1, &bytesWritten);//next line
-		f_close(&logFile);//close file
-
-		//close the file
-		sdcard_close();
-//	}
 return 1;
 }
 

@@ -1,5 +1,6 @@
 #include "nRF24AP1.h"
 #include "soft_uart.c"
+#include <util/delay.h>
 
 /**CHANGE LOG
  * 4-14-2013 - Added initalization 
@@ -23,7 +24,7 @@
 * @return: none
 **/	
 
-void nRF24AP1_init()
+void nRF24AP1_init(void)
 {
 	//configure pins as outputs
 	nRF24AP1_DIRECTION	|= ((1<<nRF24AP1_RESET_PIN) 
@@ -31,16 +32,16 @@ void nRF24AP1_init()
 						| (1<<nRF24AP1_SLEEP_PIN)
 						| (1<<nRF24AP1_SUSPEND_PIN)
 						| (1<<nRF24AP1_TX_PIN));
-	nRF24AP1_DIRECTION &= !(1<<nRF24AP1_RX_PIN);					
+	nRF24AP1_DIRECTION &= ~(1<<nRF24AP1_RX_PIN);					
 						
 	//Configure Outputs
 	nRF24AP1_PORT |= (1<<nRF24AP1_TX_PIN); //not in use, idle high
-	nRF24AP1_PORT &= !(1<<nRF24AP1_SLEEP_PIN); //disable sleep
+	nRF24AP1_PORT &= ~(1<<nRF24AP1_SLEEP_PIN); //disable sleep
 	nRF24AP1_PORT |= (1<<nRF24AP1_SUSPEND_PIN); //enable communications
 	
 	//ensure part sees the reset then bring it out
-	nRF24AP1_PORT &= !(1<<nRF24AP1_RESET_PIN);
-	_delay_ms(100);
+	nRF24AP1_PORT &= ~(1<<nRF24AP1_RESET_PIN);
+	_delay_ms(1000);
 	nRF24AP1_PORT |= (1<<nRF24AP1_RESET_PIN);
 }
 
@@ -61,7 +62,7 @@ UCHAR checkSum(UCHAR *data, int length)
 
 
 
-void reset(void)
+void reset_msg(void)
 {
    uint8_t i;
 	uint8_t buf[5];
@@ -246,7 +247,7 @@ void open_channel(void)
 
 void ant_hr_config(void)
 {
-	reset();
+	reset_msg();
 	_delay_ms(100);
 	assignch();
 	_delay_ms(1000);
