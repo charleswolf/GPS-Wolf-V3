@@ -150,6 +150,7 @@ static void idle(void)
 	// timeout handling goes here 
 	// - but there is a "softuart_kbhit" in this code...
 	// add watchdog-reset here if needed
+	asm volatile("nop"); 
 }
 
 void softuart_turn_rx_on( void )
