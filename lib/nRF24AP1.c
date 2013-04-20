@@ -166,6 +166,14 @@ void assignch4(void)
 	buf[2] = MESG_NETWORK_KEY_ID; // ID Byte
 	buf[3] = NET0;
 	//hstr2hex(&buf[4], NETWORK_KEY, 16);  // dest, orig, size
+	buf[4] = 0xB9;
+	buf[5] = 0xA5;
+	buf[6] = 0x21;
+	buf[7] = 0xFB;
+	buf[8] = 0xBD;
+	buf[9] = 0x72;
+	buf[10] = 0xC3;
+	buf[11] = 0x45;
 	buf[12] = checkSum(buf,12);
 	for(i = 0 ; i < 13 ; i++)
 	{
