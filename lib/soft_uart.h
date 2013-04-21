@@ -46,7 +46,7 @@
 #warning "Check SOFTUART_TIMERTOP"
 #endif
 
-#define SOFTUART_IN_BUF_SIZE     32
+#define SOFTUART_IN_BUF_SIZE     64
 
 // Init the Software Uart
 void softuart_init(void);

@@ -184,10 +184,6 @@
 #define NETWORK_KEY		"KEY GOES HERE" // Garmin HRM
 #define DEVICETYPE		120
 
-//Suunto specific configurations
-#define Suunto_FREQ			0x41   // Suunto radio frequency
-#define Suunto_PERIOD		0x199a // Suunto search period
-#define Suunto_NETWORK_KEY	"KEY GOES HERE" // Suunto HRM
 
 
 void nRF24AP1_init(void);

@@ -259,18 +259,18 @@ void send_ant_packet( UCHAR msgID, UCHAR argCnt, ...)
 	va_list arg;
 	va_start (arg, argCnt);
 	uint8_t i;
-	uint8_t buf[12];
+	uint8_t buf[MESG_MAX_SIZE];
 	buf[0] = MESG_TX_SYNC;
 	buf[1] = argCnt;
 	buf[2] = msgID;
 	
 	for(i = 0; i < argCnt; i++) 
 	{
-		buf[i+3] = va_arg(arg, int);
+		buf[i+MESG_HEADER_SIZE] = va_arg(arg, int);
 	}
-	buf[argCnt+3] = checkSum(buf,argCnt+3);
+	buf[argCnt+MESG_HEADER_SIZE] = checkSum(buf,argCnt+MESG_HEADER_SIZE);
 	
-	for(i = 0; i < argCnt; i++)
+	for(i = 0; i < argCnt+MESG_FRAME_SIZE; i++)
 	{
 		softuart_putchar(buf[i]);
 	}
@@ -278,7 +278,7 @@ void send_ant_packet( UCHAR msgID, UCHAR argCnt, ...)
 
 void ant_hr_config(void)
 {
-/*	
+///*	
 	send_ant_packet(MESG_SYSTEM_RESET_ID, 1, 0);
 	_delay_ms(600);
 	send_ant_packet(MESG_ASSIGN_CHANNEL_ID, 3, CHAN0, 0, NET0);	
@@ -295,7 +295,9 @@ void ant_hr_config(void)
 	_delay_ms(20);
 	send_ant_packet(MESG_OPEN_CHANNEL_ID, 1, CHAN0);
 	_delay_ms(20);
-*/
+//*/
+
+/*
 	reset_msg();
 	_delay_ms(100);
 	assignch();
@@ -316,7 +318,7 @@ void ant_hr_config(void)
 	_delay_ms(20);
 	open_channel();
 	_delay_ms(20);
-
+*/
 }
 
 /***********************************************************************
@@ -348,29 +350,31 @@ int get_ant_msg(int max_wait, UCHAR *MSG)
 	
 	int count = 0;
 	int i = 0;
-	while(count < max_wait)
+	int outcome = 0;
+	while((count < max_wait) && (outcome < 1))
 	{
 		//wait for data
 		while((!softuart_kbhit()) && (count < max_wait))
 		{
-			_delay_ms(1); // 1mSec = 4.8bits
-			count++;
+			_delay_us(10); // 1bit = 208.333uSec
+			//count++;
 		}
+		outcome = 2; //no sync
 		//check for sync
-		if(softuart_getchar() == MESG_TX_SYNC)
+		MSG[0] = softuart_getchar();
+		if(MSG[0] == MESG_TX_SYNC)
 		{
-			MSG[0] = 0xA4;
 			MSG[1] = softuart_getchar(); //length
 			for (i = 0; i < MSG[0]; i++)
 			{
 				MSG[i+2] = softuart_getchar();
 			}
 			softuart_turn_rx_off();
-			return 1; //message recieved	
+			outcome = 1; //message recieved	
 		}
 	}
 	softuart_turn_rx_off();
-	return 0;
+	return outcome;
 }
 
 

@@ -52,7 +52,7 @@ FIL logFile;
 unsigned int bytesWritten;
 int i = 0;
 
-char MSG[15];
+unsigned char MSG[15];
 char tmp[8];
 uint8_t HR = 0;
 
@@ -64,6 +64,7 @@ uint8_t HR = 0;
 //Main
 int main(void)
 {   
+int blah;
 	
 	//reference un-used pins 
 	DDRB 	|= (1<<PB0) | (1<<PB1) | (1<<PB6) | (1<<PB7);
@@ -91,14 +92,25 @@ int main(void)
 		sdcard_open ( "debug.txt" ); // open debug file
 		f_lseek ( &logFile, f_size(&logFile));//move to last line
 		
-		if(get_ant_msg(1500, &MSG[0]))
+		blah = get_ant_msg(22000, &MSG[0]);
+		if(blah == 1)
 		{
 			for(i = 0; i< MSG[1] + 4; i++)
 			{
-				utoa(HR, &tmp[0], 16);
+				utoa(MSG[i], &tmp[0], 16);
 				f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
 				f_write(&logFile, " ", 1, &bytesWritten);
 			}
+		}
+		else if (blah == 2)
+		{
+			f_write(&logFile, "No Sync 0x", 10, &bytesWritten);
+			utoa(MSG[0], &tmp[0], 16);
+			f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
+		}
+		else
+		{
+			f_write(&logFile, "Timeout", 7, &bytesWritten);
 		}
 		f_write(&logFile, "\n", 1, &bytesWritten);
 		f_close(&logFile);//close file
