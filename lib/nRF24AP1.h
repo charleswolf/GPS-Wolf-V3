@@ -176,16 +176,17 @@
 #define CHAN1      1
 #define NET0      0
 #define NET1      1
-#define TIMEOUT   10
+#define TIMEOUT   12
 
 //Garmin specific configurations
-#define FREQ 			0x39; //  garmin radio frequency
-#define PERIOD      	0x1f86; // Garmin search period
+#define FREQ 			0x39 //  garmin radio frequency
+#define PERIOD      	8070 // Garmin search period
 #define NETWORK_KEY		"KEY GOES HERE" // Garmin HRM
+#define DEVICETYPE		120
 
 //Suunto specific configurations
-#define Suunto_FREQ			0x41;   // Suunto radio frequency
-#define Suunto_PERIOD		0x199a; // Suunto search period
+#define Suunto_FREQ			0x41   // Suunto radio frequency
+#define Suunto_PERIOD		0x199a // Suunto search period
 #define Suunto_NETWORK_KEY	"KEY GOES HERE" // Suunto HRM
 
 
@@ -201,6 +202,8 @@ void timeout(void);
 void frequency(void);
 void channel_period(void);
 void open_channel(void);
+void send_ant_packet( UCHAR msgID, UCHAR argCnt, ...);
 void ant_hr_config(void);
+int get_ant_msg(int max_wait, UCHAR *MSG);
 
 #endif

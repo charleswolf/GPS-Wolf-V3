@@ -77,10 +77,10 @@ void reset_msg(void)
 		softuart_putchar(buf[i]);
 	}
 
-}
+} 
 
 
-void assignch(void)
+void assignch(void) 
 {
 	uint8_t i;
 	uint8_t buf[6];
@@ -89,7 +89,7 @@ void assignch(void)
 	buf[1] = 0x02; 	// length
 	buf[2] = MESG_REQUEST_ID;
 	buf[3] = CHAN0; 
-	buf[4] = MESG_CAPABILITIES_ID; 
+	buf[4] = MESG_CAPABILITIES_ID; //network number?  0??
 	buf[5] = checkSum(buf,5);
 	for(i = 0 ; i < 6 ; i++)
 	{
@@ -97,7 +97,7 @@ void assignch(void)
 	}
 }
 
-void assignch1(void)
+void assignch1(void) 
 {
 	uint8_t i;
 	uint8_t buf[6];
@@ -106,7 +106,7 @@ void assignch1(void)
 	buf[1] = 0x02; // LENGTH 
 	buf[2] = MESG_REQUEST_ID;
 	buf[3] = CHAN0; 
-	buf[4] = ((UCHAR)0x3D); 
+	buf[4] = ((UCHAR)0x3D); //???
 	buf[5] = checkSum(buf,5);
 	for(i = 0 ; i < 6 ; i++)
 	{
@@ -253,8 +253,49 @@ void open_channel(void)
 }
 
 
+
+void send_ant_packet( UCHAR msgID, UCHAR argCnt, ...) 
+{
+	va_list arg;
+	va_start (arg, argCnt);
+	uint8_t i;
+	uint8_t buf[12];
+	buf[0] = MESG_TX_SYNC;
+	buf[1] = argCnt;
+	buf[2] = msgID;
+	
+	for(i = 0; i < argCnt; i++) 
+	{
+		buf[i+3] = va_arg(arg, int);
+	}
+	buf[argCnt+3] = checkSum(buf,argCnt+3);
+	
+	for(i = 0; i < argCnt; i++)
+	{
+		softuart_putchar(buf[i]);
+	}
+}
+
 void ant_hr_config(void)
 {
+/*	
+	send_ant_packet(MESG_SYSTEM_RESET_ID, 1, 0);
+	_delay_ms(600);
+	send_ant_packet(MESG_ASSIGN_CHANNEL_ID, 3, CHAN0, 0, NET0);	
+	_delay_ms(1000);
+	send_ant_packet(MESG_CHANNEL_ID_ID, 5, CHAN0, 0, 0, DEVICETYPE, 0);
+	_delay_ms(100);
+	send_ant_packet(MESG_NETWORK_KEY_ID, 9, NET0, 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45);
+	_delay_ms(100);
+	send_ant_packet(MESG_CHANNEL_SEARCH_TIMEOUT_ID, 2, CHAN0, TIMEOUT);
+	_delay_ms(100);	
+	send_ant_packet(MESG_CHANNEL_RADIO_FREQ_ID, 2, CHAN0, FREQ);
+	_delay_ms(20);
+	send_ant_packet(MESG_CHANNEL_MESG_PERIOD_ID, 3, CHAN0, (PERIOD & 0x00FF), ((PERIOD & 0xFF00) >> 8));
+	_delay_ms(20);
+	send_ant_packet(MESG_OPEN_CHANNEL_ID, 1, CHAN0);
+	_delay_ms(20);
+*/
 	reset_msg();
 	_delay_ms(100);
 	assignch();
@@ -275,6 +316,61 @@ void ant_hr_config(void)
 	_delay_ms(20);
 	open_channel();
 	_delay_ms(20);
+
+}
+
+/***********************************************************************
+ * Name: get_ant_msg
+ * 
+ * Description: wait and recieve a message from the nRF24AP2
+ * 
+ * Author(s): Charles Wolf
+ * 
+ * @param: 
+ * 		int	max_wait -> timeout in 1mSec increments
+ * 		UCHAR *MSG 	-> pointer to the message array
+ * @return:
+ * 		int -> 	0 = message timeout
+ * 				1 = message recieved
+ * Comments:
+ * 		ANT Message Structure
+ * 			SYNC (0xA4)		1 Byte
+ * 			length			1 Byte
+ * 			message ID		1 Byte
+ * 			Data 			length
+ * 			CheckSum		1 Byte
+ * 			
+ * ********************************************************************/
+int get_ant_msg(int max_wait, UCHAR *MSG)
+{
+	softuart_turn_rx_on();	
+	softuart_flush_input_buffer();
+	
+	int count = 0;
+	int i = 0;
+	while(count < max_wait)
+	{
+		//wait for data
+		while((!softuart_kbhit()) && (count < max_wait))
+		{
+			_delay_ms(1); // 1mSec = 4.8bits
+			count++;
+		}
+		//check for sync
+		if(softuart_getchar() == MESG_TX_SYNC)
+		{
+			MSG[0] = 0xA4;
+			MSG[1] = softuart_getchar(); //length
+			for (i = 0; i < MSG[0]; i++)
+			{
+				MSG[i+2] = softuart_getchar();
+			}
+			softuart_turn_rx_off();
+			return 1; //message recieved	
+		}
+	}
+	softuart_turn_rx_off();
+	return 0;
 }
 
 

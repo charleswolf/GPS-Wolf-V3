@@ -52,7 +52,7 @@ FIL logFile;
 unsigned int bytesWritten;
 int i = 0;
 
-char MSG[8];
+char MSG[15];
 char tmp[8];
 uint8_t HR = 0;
 
@@ -86,35 +86,24 @@ int main(void)
 	f_write(&logFile, "\n", 1, &bytesWritten);//next line
 	f_close(&logFile);//close file
 	
-	softuart_turn_rx_on();	
-	softuart_flush_input_buffer();
 	while(1)
 	{
-		while(softuart_kbhit())
+		sdcard_open ( "debug.txt" ); // open debug file
+		f_lseek ( &logFile, f_size(&logFile));//move to last line
+		
+		if(get_ant_msg(1500, &MSG[0]))
 		{
-			/*******************************************
-			 * Message structure of page 0
-			 * *****************************************
-			 * Byte 	Description
-			 * 0		Page #
-			 * 1		HW version
-			 * 2		SW version
-			 * 3		Model Number
-			 * 4		Heart Beat Event Time (lsb)
-			 * 5		Heart Beat Event Time (msb)
-			 * 6		computed heart rate
-			********************************************/
-
-			HR = softuart_getchar();
-			sdcard_open ( "debug.txt" ); // open debug file
-			f_lseek ( &logFile, f_size(&logFile));//move to last line
-			utoa(HR, &tmp[0], 16);
-			f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
-			f_write(&logFile, " ", 1, &bytesWritten);
-			f_close(&logFile);//close file
+			for(i = 0; i< MSG[1] + 4; i++)
+			{
+				utoa(HR, &tmp[0], 16);
+				f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
+				f_write(&logFile, " ", 1, &bytesWritten);
+			}
 		}
+		f_write(&logFile, "\n", 1, &bytesWritten);
+		f_close(&logFile);//close file
 	}
 
-return 1;
+	return 1;
 }
 
