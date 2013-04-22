@@ -132,21 +132,23 @@ int get_ant_msg(int max_wait, UCHAR *MSG)
 	int count = 0;
 	int i = 0;
 	int outcome = 0;
-	while((count < max_wait) && (outcome < 1))
+	//while((count < max_wait) && (outcome != 1))
+	while(outcome != 1)
 	{
 		//wait for data
-		while((!softuart_kbhit()) && (count < max_wait))
-		{
-			_delay_us(10); // 1bit = 208.333uSec
+		//while((softuart_kbhit() < 1) && (count < max_wait))
+		//while(softuart_kbhit() < 1)
+		//{
+		//	_delay_us(100); // 1bit = 208.333uSec
 			//count++;
-		}
+		//}
 		outcome = 2; //no sync
 		//check for sync
 		MSG[0] = softuart_getchar();
 		if(MSG[0] == MESG_TX_SYNC)
 		{
 			MSG[1] = softuart_getchar(); //length
-			for (i = 0; i < MSG[0]; i++)
+			for (i = 0; i < MSG[1]; i++)
 			{
 				MSG[i+2] = softuart_getchar();
 			}

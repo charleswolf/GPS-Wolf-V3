@@ -92,7 +92,7 @@ int blah;
 		sdcard_open ( "debug.txt" ); // open debug file
 		f_lseek ( &logFile, f_size(&logFile));//move to last line
 		
-		blah = get_ant_msg(22000, &MSG[0]);
+		blah = get_ant_msg(22001, &MSG[0]);
 		if(blah == 1)
 		{
 			for(i = 0; i< MSG[1] + 4; i++)

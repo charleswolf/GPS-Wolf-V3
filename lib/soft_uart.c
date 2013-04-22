@@ -11,11 +11,11 @@
 
 // startbit and stopbit parsed internaly (see ISR)
 #define RX_NUM_OF_BITS (8)
-volatile static char              inbuf[SOFTUART_IN_BUF_SIZE];
-volatile static unsigned char    qin  = 0;
-/*volatile*/ static unsigned char qout = 0;
-volatile static unsigned char    flag_rx_off;
-volatile static unsigned char    flag_rx_ready;
+volatile char				inbuf[SOFTUART_IN_BUF_SIZE];
+volatile unsigned char    	qin  = 0;
+/*volatile*/ unsigned char	qout = 0;
+volatile unsigned char		flag_rx_off;
+volatile unsigned char		flag_rx_ready;
 
 // 1 Startbit, 8 Databits, 1 Stopbit = 10 Bits/Frame
 #define TX_NUM_OF_BITS (10)
