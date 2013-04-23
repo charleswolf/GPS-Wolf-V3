@@ -52,7 +52,7 @@ FIL logFile;
 unsigned int bytesWritten;
 int i = 0;
 
-unsigned char MSG[15];
+unsigned char MSG[21];
 char tmp[8];
 uint8_t HR = 0;
 
