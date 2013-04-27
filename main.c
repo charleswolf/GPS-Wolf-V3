@@ -1,38 +1,28 @@
 /*
  * main.c
- * 
- * Copyright 2013 Charles Wolf 
- * 
+ *
+ * Copyright 2013 Charles Wolf
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
- * 
- * 
+ *
+ *
  */
 
 
-#define F_CPU 8000000UL //8 MHz Internal Oscillator 
-
-
-//Modes of operation
-#define NORMAL_MODE 0	//standard operating mode
-#define DEBUG_MODE	1	//write debug modes 
-#define GPGGA_MODE	2	//write each GPGGA message to a file
-
-
-#define RUN_MODE NORMAL_MODE 
-
+#define F_CPU 8000000UL //8 MHz Internal Oscillator
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -46,6 +36,9 @@
 #include "lib/ff.c"
 #include "lib/diskio.c"
 
+#include "lib/uart.c"
+#include "lib/nRF24AP1.c"
+
 //Global variables
 FATFS FileSystemObject;
 FIL logFile;
@@ -57,16 +50,14 @@ char tmp[8];
 uint8_t HR = 0;
 
 #include "lib/sdcard.c"
-#include "lib/uart.c"
-#include "lib/nRF24AP1.c"
 
 
 //Main
 int main(void)
-{   
+{
 int blah;
-	
-	//reference un-used pins 
+
+	//reference un-used pins
 	DDRB 	|= (1<<PB0) | (1<<PB1) | (1<<PB6) | (1<<PB7);
 	PORTB 	&= !((1<<PB0) | (1<<PB1) | (1<<PB6) | (1<<PB7));
 	DDRC 	|= 0xFF;	//all output
@@ -74,24 +65,24 @@ int blah;
 
 	//allow time for power to stabilize
 	_delay_ms(1000);
-	
-	init_sdcard(0); 
-	softuart_init();	
+
+	init_sdcard(0);
+	softuart_init();
 	nRF24AP1_init();
 	ant_hr_config();
 
-	
+
 	sdcard_open ( "debug.txt" ); // open debug file
 	f_lseek ( &logFile, f_size(&logFile));//move to last line
 	f_write(&logFile, "configured", 10, & bytesWritten);
 	f_write(&logFile, "\n", 1, &bytesWritten);//next line
 	f_close(&logFile);//close file
-	
+
 	while(1)
 	{
 		sdcard_open ( "debug.txt" ); // open debug file
 		f_lseek ( &logFile, f_size(&logFile));//move to last line
-		
+
 		blah = get_ant_msg(22001, &MSG[0]);
 		if(blah == 1)
 		{

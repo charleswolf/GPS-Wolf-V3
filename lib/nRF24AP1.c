@@ -156,6 +156,7 @@ int get_ant_msg(int max_wait, UCHAR *MSG)
 	int i = 0;
 	int outcome = 0;
 	int length = 0;
+	int checksum = 0;
 	while((count < max_wait) && (outcome != 1))
 	{
 		//wait for data
@@ -167,17 +168,25 @@ int get_ant_msg(int max_wait, UCHAR *MSG)
 		outcome = 2; //no sync
 		//check for sync
 		MSG[0] = softuart_getchar();
-		if(MSG[0] == MESG_TX_SYNC)
+		//softuart_getchar() is a possible place to get stuck waiting
+		if(MSG[0] == MESG_TX_SYNC) 
 		{
 			MSG[1] = softuart_getchar(); //length
 			length = MSG[1];
-			if(length > 17) length = 17; //can possibly get stuck waiting here
+			if(length > 17) length = 17; 
 			for (i = 0; i < MSG[1]; i++)
 			{
 				MSG[i+2] = softuart_getchar();
 			}
-			softuart_turn_rx_off();
-			outcome = 1; //message recieved	
+			checksum = checkSum(&MSG[0], length-1);
+			if (checksum != MSG[length-1])
+			{
+				outcome = 3; //bad checksum
+			}
+			else
+			{
+				outcome = 1; //message recieved	
+			}
 		}
 	}
 	softuart_turn_rx_off();
