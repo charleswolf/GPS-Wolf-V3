@@ -99,6 +99,10 @@ int blah;
 			utoa(MSG[0], &tmp[0], 16);
 			f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
 		}
+		else if (blah == 3)
+		{
+			f_write(&logFile, "bad checksum", 12, &bytesWritten);
+		}
 		else
 		{
 			f_write(&logFile, "Timeout", 7, &bytesWritten);

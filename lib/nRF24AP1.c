@@ -172,14 +172,14 @@ int get_ant_msg(int max_wait, UCHAR *MSG)
 		if(MSG[0] == MESG_TX_SYNC) 
 		{
 			MSG[1] = softuart_getchar(); //length
-			length = MSG[1];
+			length = MSG[1]+2;
 			if(length > 17) length = 17; 
-			for (i = 0; i < MSG[1]; i++)
+			for (i = 0; i < length; i++)
 			{
 				MSG[i+2] = softuart_getchar();
 			}
-			checksum = checkSum(&MSG[0], length-1);
-			if (checksum != MSG[length-1])
+			checksum = checkSum(&MSG[0], length+3);
+			if (checksum != MSG[length+4])
 			{
 				outcome = 3; //bad checksum
 			}
