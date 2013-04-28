@@ -44,6 +44,7 @@ FATFS FileSystemObject;
 FIL logFile;
 unsigned int bytesWritten;
 int i = 0;
+int j = 0;
 
 unsigned char MSG[21];
 char tmp[8];
@@ -55,7 +56,7 @@ uint8_t HR = 0;
 //Main
 int main(void)
 {
-int blah;
+int msg_outcome;
 
 	//reference un-used pins
 	DDRB 	|= (1<<PB0) | (1<<PB1) | (1<<PB6) | (1<<PB7);
@@ -78,39 +79,32 @@ int blah;
 	f_write(&logFile, "\n", 1, &bytesWritten);//next line
 	f_close(&logFile);//close file
 
+	_delay_ms(3000);
 	while(1)
 	{
-		sdcard_open ( "debug.txt" ); // open debug file
-		f_lseek ( &logFile, f_size(&logFile));//move to last line
-
-		blah = get_ant_msg(22001, &MSG[0]);
-		if(blah == 1)
+		msg_outcome = get_ant_msg(3000, &MSG[0]);
+		j++;
+		if (j > 3)
 		{
-			for(i = 0; i< MSG[1] + 4; i++)
+			j = 0;
+			if(msg_outcome == 1)
 			{
-				utoa(MSG[i], &tmp[0], 16);
+				utoa(MSG[11], &tmp[0], 10);
+				sdcard_open ( "debug.txt" );
+				f_lseek ( &logFile, f_size(&logFile));//move to last line
 				f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
-				f_write(&logFile, " ", 1, &bytesWritten);
+				f_write(&logFile, "\n", 1, &bytesWritten);
+				f_close(&logFile);//close file
+			}
+			else
+			{
+				sdcard_open ( "debug.txt" );
+				f_lseek ( &logFile, f_size(&logFile));//move to last line
+				f_write(&logFile, "Error\n", 6, &bytesWritten);
+				f_close(&logFile);//close file
 			}
 		}
-		else if (blah == 2)
-		{
-			f_write(&logFile, "No Sync 0x", 10, &bytesWritten);
-			utoa(MSG[0], &tmp[0], 16);
-			f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
-		}
-		else if (blah == 3)
-		{
-			f_write(&logFile, "bad checksum", 12, &bytesWritten);
-		}
-		else
-		{
-			f_write(&logFile, "Timeout", 7, &bytesWritten);
-		}
-		f_write(&logFile, "\n", 1, &bytesWritten);
-		f_close(&logFile);//close file
 	}
-
 	return 1;
 }
 

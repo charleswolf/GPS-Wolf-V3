@@ -148,15 +148,16 @@ void ant_hr_config(void)
  * 			
  * ********************************************************************/
 int get_ant_msg(int max_wait, UCHAR *MSG)
-{
-	softuart_turn_rx_on();	
-	softuart_flush_input_buffer();
-	
+{	
 	int count = 0;
 	int i = 0;
 	int outcome = 0;
 	int length = 0;
 	int checksum = 0;
+	
+	softuart_turn_rx_on();	
+	softuart_flush_input_buffer();
+	
 	while((count < max_wait) && (outcome != 1))
 	{
 		//wait for data
@@ -165,27 +166,30 @@ int get_ant_msg(int max_wait, UCHAR *MSG)
 			_delay_us(100); // 1bit = 208.333uSec
 			count++;
 		}
-		outcome = 2; //no sync
-		//check for sync
-		MSG[0] = softuart_getchar();
-		//softuart_getchar() is a possible place to get stuck waiting
-		if(MSG[0] == MESG_TX_SYNC) 
+		if ( softuart_kbhit() > 0 )
 		{
-			MSG[1] = softuart_getchar(); //length
-			length = MSG[1]+2;
-			if(length > 17) length = 17; 
-			for (i = 0; i < length; i++)
+			outcome = 2; //no sync
+			//check for sync
+			MSG[0] = softuart_getchar();
+			//softuart_getchar() is a possible place to get stuck waiting
+			if(MSG[0] == MESG_TX_SYNC) 
 			{
-				MSG[i+2] = softuart_getchar();
-			}
-			checksum = checkSum(&MSG[0], length+3);
-			if (checksum != MSG[length+4])
-			{
-				outcome = 3; //bad checksum
-			}
-			else
-			{
-				outcome = 1; //message recieved	
+				MSG[1] = softuart_getchar(); //length
+				length = MSG[1]+2;
+				if(length > 17) length = 17; //protect length
+				for (i = 0; i < length; i++)
+				{
+					MSG[i+2] = softuart_getchar();
+				}
+				checksum = checkSum(&MSG[0], length+3);
+				if (checksum != MSG[length+4])
+				{
+					outcome = 3; //bad checksum
+				}
+				else
+				{
+					outcome = 1; //message recieved	
+				}
 			}
 		}
 	}
