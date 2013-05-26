@@ -1,10 +1,11 @@
-#include <avr/io.h>
 #include <stdlib.h>
 #include <avr/pgmspace.h> 
 #include <string.h>
+#include "lcdfont.c"
 #include "lcd.h"
 
-extern uint8_t PROGMEM font[];
+
+const uint8_t PROGMEM font[];
 int pagemap[] = { 3, 2, 1, 0, 7, 6, 5, 4 };
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
@@ -70,7 +71,7 @@ void st7565_init(void) {
   st7565_command(CMD_SET_COM_NORMAL);
 
   // black text on white background
-  st7565_command(CMD_SET_DISP_REVERSE);
+  st7565_command(CMD_SET_DISP_NORMAL);
 
   // Initial display line
   st7565_command(CMD_SET_DISP_START_LINE);

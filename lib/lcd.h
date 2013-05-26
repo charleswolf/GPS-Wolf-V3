@@ -43,44 +43,44 @@
 #define CMD_TEST  0xF0
 
 // Backlight
-#define BLA_DDR DDRC
-#define BLA_PIN PINC
-#define BLA_PORT PORTC
-#define BLA 3
+//#define BLA_DDR DDRC
+//#define BLA_PIN PINC
+//#define BLA_PORT PORTC
+//#define BLA 3
 
 // SDA (SI)
-#define SID_DDR DDRD
-#define SID_PIN PIND
-#define SID_PORT PORTD
-#define SID 4
+#define SID_DDR DDRC
+#define SID_PIN PINC
+#define SID_PORT PORTC
+#define SID 2
 
 // SCK
-#define SCLK_DDR DDRD
-#define SCLK_PIN PIND
-#define SCLK_PORT PORTD
-#define SCLK 3
+#define SCLK_DDR DDRC
+#define SCLK_PIN PINC
+#define SCLK_PORT PORTC
+#define SCLK 1
 
 // A0
-#define A0_DDR DDRD
-#define A0_PIN PIND
-#define A0_PORT PORTD
-#define A0 2
+#define A0_DDR DDRB
+#define A0_PIN PINB
+#define A0_PORT PORTB
+#define A0 1
 
 // RST
 #define RST_DDR DDRC
 #define RST_PIN PINC
 #define RST_PORT PORTC
-#define RST 5
+#define RST 0
 
 // CS1B
-#define CS_DDR DDRC
-#define CS_PIN PINC
-#define CS_PORT PORTC
-#define CS 4
+#define CS_DDR DDRB
+#define CS_PIN PINB
+#define CS_PORT PORTB
+#define CS 0
 
-#define LED_DDR DDRC
-#define LED_PORT PORTC
-#define LED 3
+//#define LED_DDR DDRC
+//#define LED_PORT PORTC
+//#define LED 3
 
 void spiwrite(uint8_t c);
 

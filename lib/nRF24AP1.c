@@ -66,6 +66,7 @@ void nRF24AP1_init(void)
 	nRF24AP1_PORT &= ~(1<<nRF24AP1_RESET_PIN);
 	_delay_ms(1000);
 	nRF24AP1_PORT |= (1<<nRF24AP1_RESET_PIN);
+	_delay_ms(1000);
 }
 
 

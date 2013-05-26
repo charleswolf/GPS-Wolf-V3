@@ -10,9 +10,10 @@
 #include "diskio.h"
 
 /*SPI configuration*/
-#define DD_MOSI   DDB3
-#define DD_SCK   DDB5
-#define DDR_SPI   DDRB
+#define DD_MOSI   	DDB3
+#define DD_SCK   	DDB5
+#define DD_MISO		DDB4
+#define DDR_SPI   	DDRB
 #ifndef DD_SS
 #define DD_SS   2
 #endif
@@ -53,8 +54,6 @@
 #define CT_BLOCK	0x08		/* Block addressing */
 
 /* Port Controls  (Platform dependent) */
-//#define CS_LOW()	PORTB &= ~1		/* MMC CS = L */
-//#define	CS_HIGH()	PORTB |= 1		/* MMC CS = H */
 #define CS_LOW()	SD_CS_PORT &= ~(1<<SD_CS_PIN)      /* MMC CS = L */
 #define CS_HIGH()	SD_CS_PORT |=  (1<<SD_CS_PIN)      /* MMC CS = H */ 
 
@@ -175,13 +174,9 @@ int power_status(void)		/* Socket power state: 0=off, 1=on */
 static
 void power_on (void)
 {
-#if (defined SD_PWR_PIN | defined SD_PWR_PORT)
-   DDRC|=(1<<SD_PWR_PIN);          // Turns on PWR pin as output
-   SD_PWR_PORT|=(1<<SD_PWR_PIN);   // Drives PWR pin high
-#endif
-
    SD_CS_DDR|=(1<<SD_CS_PIN);          // Turns on CS pin as output
-   DDR_SPI = (1<<DD_MOSI)|(1<<DD_SCK)| (1<<DD_SS);
+   DDR_SPI |= (1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS); //SPI outputs
+   DDR_SPI &= ~(1<<DD_MISO); //SPI inputs
    SPCR = (1<<SPE)|(1<<MSTR); /* Initialize SPI port (Mode 0) */
 } 
 

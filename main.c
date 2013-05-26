@@ -22,7 +22,6 @@
  */
 
 
-
 #define F_CPU 8000000UL //8 MHz Internal Oscillator
 
 #include <avr/io.h>
@@ -36,6 +35,8 @@
 
 #include "lib/ff.c"
 #include "lib/diskio.c"
+#include "lib/lcd.c"
+
 
 #include "lib/uart.c"
 #include "lib/nRF24AP1.c"
@@ -50,6 +51,7 @@ int j = 0;
 unsigned char MSG[21];
 char tmp[8];
 uint8_t HR = 0;
+uint8_t disp_buffer[512];
 
 #include "lib/sdcard.c"
 
@@ -67,11 +69,23 @@ int msg_outcome;
 
 	//allow time for power to stabilize
 	_delay_ms(1000);
+	
+	st7565_init();
+	st7565_command(CMD_DISPLAY_ON);
+	st7565_command(CMD_SET_ALLPTS_NORMAL);
+	clear_screen();
+	clear_buffer(disp_buffer);
+	
+	drawstring(disp_buffer, 0, 3, "Fitness Monitor");
+	write_buffer(disp_buffer);
+	clear_buffer(disp_buffer);
 
-	init_sdcard(0);
+	init_sdcard(0); 
 	softuart_init();
 	nRF24AP1_init();
+	_delay_ms(1000);
 	ant_hr_config();
+	
 
 
 	sdcard_open ( "debug.txt" ); // open debug file
@@ -79,8 +93,10 @@ int msg_outcome;
 	f_write(&logFile, "configured", 10, & bytesWritten);
 	f_write(&logFile, "\n", 1, &bytesWritten);//next line
 	f_close(&logFile);//close file
+	
 
-	_delay_ms(3000);
+
+	_delay_ms(1000);
 	while(1)
 	{
 		msg_outcome = get_ant_msg(3000, &MSG[0]);
@@ -96,6 +112,13 @@ int msg_outcome;
 				f_write(&logFile, &tmp[0], strlen(tmp), &bytesWritten);
 				f_write(&logFile, "\n", 1, &bytesWritten);
 				f_close(&logFile);//close file
+			
+				//clear_screen();
+				clear_buffer(disp_buffer);
+				drawstring(disp_buffer, 0, 3, &tmp[0]);
+				write_buffer(disp_buffer);
+				
+				
 			}
 			else
 			{
@@ -103,6 +126,11 @@ int msg_outcome;
 				f_lseek ( &logFile, f_size(&logFile));//move to last line
 				f_write(&logFile, "Error\n", 6, &bytesWritten);
 				f_close(&logFile);//close file
+				
+				clear_screen();
+				clear_buffer(disp_buffer);
+				drawstring(disp_buffer, 0, 3, "error");
+				write_buffer(disp_buffer);
 			}
 		}
 	}
