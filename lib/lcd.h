@@ -102,4 +102,6 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
 		const uint8_t bitmap, uint8_t w, uint8_t h,
 		uint8_t color);
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c);
+void drawNum(uint8_t *buff, uint8_t x, uint8_t c);
+void numstring(uint8_t *buff, uint8_t x, char *c);
 

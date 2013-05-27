@@ -6,7 +6,33 @@
 
 
 const uint8_t PROGMEM font[];
-int pagemap[] = { 3, 2, 1, 0, 7, 6, 5, 4 };
+int pagemap[] = { 3, 2, 1, 0 };
+
+void numstring(uint8_t *buff, uint8_t x, char *c)
+{
+	while ((c[0] != 0) && (x + 26 >= LCDWIDTH)) 
+	{
+		drawNum(buff, x, c[0]);
+		c++;
+		x += 27; // each char is 26 pixels wide
+	}
+}
+void drawNum(uint8_t *buff, uint8_t x, uint8_t c)
+{
+	uint8_t i =0;
+	if (( c > 0x29 ) && ( c < 0x40))
+	{
+		for ( i =0; i<26; i++ ) 
+		{
+			//each number consists of 104 bytes spanning 4 pages  
+			buff[x] = pgm_read_byte(numbers+((c-48)*104)+i);			//page 0
+			buff[x + 128] = pgm_read_byte(numbers+((c-48)*104)+i+26);	//page 1
+			buff[x + 256] = pgm_read_byte(numbers+((c-48)*104)+i+52);	//page 2
+			buff[x + 384] = pgm_read_byte(numbers+((c-48)*104)+i+78);	//page 3
+			x++;
+		}
+	}
+}
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
   while (c[0] != 0) {
@@ -26,7 +52,7 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
   uint8_t i =0;
   for ( i =0; i<5; i++ ) {
-    buff[x + (line*128) ] = pgm_read_byte(font+(c*5)+i);
+    buff[x + (line*128) ] = pgm_read_byte(numbers+(c*5)+i);
     x++;
   }
 }
@@ -127,7 +153,7 @@ void st7565_set_brightness(uint8_t val) {
 void write_buffer(uint8_t *buffer) {
   uint8_t c, p;
 
-  for(p = 0; p < 8; p++) {
+  for(p = 0; p < 4; p++) {
     st7565_command(CMD_SET_PAGE | pagemap[p]);
     st7565_command(CMD_SET_COLUMN_LOWER | (0x0 & 0xf));
     st7565_command(CMD_SET_COLUMN_UPPER | ((0x0 >> 4) & 0xf));
