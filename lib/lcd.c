@@ -10,7 +10,7 @@ int pagemap[] = { 3, 2, 1, 0 };
 
 void numstring(uint8_t *buff, uint8_t x, char *c)
 {
-	while ((c[0] != 0) && (x + 26 >= LCDWIDTH)) 
+	while ((c[0] != 0) && (x + 26 <= LCDWIDTH)) 
 	{
 		drawNum(buff, x, c[0]);
 		c++;
@@ -52,7 +52,7 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
   uint8_t i =0;
   for ( i =0; i<5; i++ ) {
-    buff[x + (line*128) ] = pgm_read_byte(numbers+(c*5)+i);
+    buff[x + (line*128) ] = pgm_read_byte(font+(c*5)+i);
     x++;
   }
 }

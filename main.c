@@ -77,65 +77,6 @@ int msg_outcome;
 	clear_buffer(disp_buffer);
 	
 	
-	drawNum(disp_buffer, 0, 0x35);
-	write_buffer(disp_buffer);
-	clear_buffer(disp_buffer);
-	while(1)
-	{
-		drawNum(disp_buffer, 0, 0x30);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x31);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x32);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);		
-		
-		drawNum(disp_buffer, 0, 0x33);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x34);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x35);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x36);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x37);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x38);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-		
-		drawNum(disp_buffer, 0, 0x39);
-		write_buffer(disp_buffer);
-		clear_buffer(disp_buffer);
-		_delay_ms(1000);
-	}	
-	
-	
-	
-	
 	drawstring(disp_buffer, 0, 3, "Fitness Monitor");
 	write_buffer(disp_buffer);
 	clear_buffer(disp_buffer);
@@ -175,7 +116,7 @@ int msg_outcome;
 			
 				//clear_screen();
 				clear_buffer(disp_buffer);
-				drawstring(disp_buffer, 0, 3, &tmp[0]);
+				numstring(disp_buffer, 26, &tmp[0]);
 				write_buffer(disp_buffer);
 				
 				
