@@ -202,7 +202,8 @@ all: begin gccversion sizebefore $(TARGET).elf $(TARGET).hex $(TARGET).eep \
 full: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) -u -U lfuse:w:0xe2:m  -U hfuse:w:0xd9:m -U efuse:w:0x07:m
 	$(AVRDUDE) $(AVRDUDE_FLAGS) -B 1 -U flash:w:$< 
-	$(AVRDUDE) $(AVRDUDE_FLAGS) -B 1 -U eeprom:w:iveep.hex
+	#$(AVRDUDE) $(AVRDUDE_FLAGS) -B 1 -U eeprom:w:iveep.hex
+	avr-size -C --mcu=atmega328p main.elf
 
 
 burn-fuse: 
