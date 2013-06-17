@@ -1,4 +1,14 @@
 #include "sdcard.h"
+#include <string.h>
+#include <avr/pgmspace.h> 
+
+
+#include <avr/pgmspace.h> 
+ 
+const char header_a[] PROGMEM = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx creator=\"GPSWOLF\" version=\"1.1\" xmlns=\"http://www.topografix.com/GPX/1/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\" xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\" xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\">\n<trk>\n<name>Path</name>\n<number>1</number>\n<trkseg>\n";
+const char footer_a[] PROGMEM = "</trkseg></trk></gpx>";
+const char header_b[] PROGMEM = "<extensions>\n<gpxtpx:TrackPointExtension>\n<gpxtpx:hr>";
+const char footer_b[] PROGMEM = "</gpxtpx:hr>\n</gpxtpx:TrackPointExtension>\n</extensions>";
 
 /**CHANGE LOG
  * -----------------------
@@ -100,102 +110,35 @@ int sd_check_file( char * filename )
 	//try to open an existing file for reading
 	status =  f_open(&logFile, filename , FA_OPEN_EXISTING | FA_READ );
 	//if sucessful, close the file.  
-	if ( status == FR_OK ) sdcard_close();
+	if ( status == FR_OK ) f_close(&logFile);
 	return status; //return the result of opening the file
 }
 
 
 
 /**
-* Name : gpx_write_header
+* Name : gpx_write_progmem
 *
-* Description: write header portion of KML file
+* Description: write to a GPX file from a location in program memory
 *
 * Author(s): Charles Wolf
 *
-* @param: filename - name of file to write header to
+* @param: loc - location in program memory
 *
 * @return: none
 **/
 
-int gpx_write_header( char * filename )
+int gpx_write_progmem( PGM_P loc )
 {
-		char header_a[] = "<?xml version=\"1.0\"?>\n<gpx version = \"0.6\" creator = \"GPS WOLF\">\n<trk>\n<name>Path</name>\n<number>1</number>\n<trkseg>\n";
-		f_write(&logFile, &header_a[0], strlen(header_a), &bytesWritten);
-		return 1;
-
-}
-
-
-
-
-/**
-* Name : kml_write_header (inactive)
-*
-* Description: write header portion of KML file
-*
-* Author(s): Charles Wolf
-*
-* @param: filename - name of file to write header to
-*
-* @return: none
-
-
-int kml_write_header( char * filename )
-{
-		char header_a[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">";
-		char header_b[] = "<Document><Style id=\"l_c\"><LineStyle><color>7f00ffff</color><width>3</width></LineStyle></Style>";
-		char header_c[] = "<Placemark><styleUrl>#l_c</styleUrl><LineString><coordinates>";
-		f_write(&logFile, &header_a[0], strlen(header_a), &bytesWritten);
-		f_write(&logFile, &header_b[0], strlen(header_b), &bytesWritten);
-		f_write(&logFile, &header_c[0], strlen(header_c), &bytesWritten);
-		f_write(&logFile, "\n", 1, &bytesWritten);
-		return 1;
-
-}
-**/
-
-
-/**
-* Name : gpx_write_footer
-*
-* Description: write header portion of KML file
-*
-* Author(s): Charles Wolf
-*
-* @param: filename - name of file to write footer to
-*
-* @return: none
-**/
-
-int gpx_write_footer( char * filename )
-{
-	char footer[] = "</trkseg></trk></gpx>";
-	f_write(&logFile, &footer[0], strlen(footer), &bytesWritten);
+    char c;
+    while ((c = pgm_read_byte(loc++)) != 0) 
+    {
+		f_putc (c, &logFile);
+		//f_write(&logFile, &c, 1, &bytesWritten);
+	}
 	return 1;
+
 }
-
-
-
-/**
-* Name : kml_write_footer  (inactive)
-*
-* Description: write header portion of KML file
-*
-* Author(s): Charles Wolf
-*
-* @param: filename - name of file to write footer to
-*
-* @return: none
-
-
-int kml_write_footer( char * filename )
-{
-	char footer[] = "</coordinates></LineString></Placemark></Document></kml>";
-	f_write(&logFile, &footer[0], strlen(footer), &bytesWritten);
-	return 1;
-}
-**/
 
 
 
@@ -219,15 +162,18 @@ int sd_new_pathfile( char * filename )
 	
 	sprintf( filename, "/path%d.gpx",  i );
 	//determine the next path file by checking for old path files
-	while ( sd_check_file( filename ) == FR_OK )
+	while ( f_open(&logFile, filename , FA_OPEN_EXISTING | FA_READ ) == FR_OK )
 	{
+		f_close(&logFile);
 		i++;
 		sprintf( filename, "/path%d.gpx", i );
 	}
 	//create next path file
 	sdcard_open( filename );
-	gpx_write_header( filename );
-	gpx_write_footer( filename );
+	gpx_write_progmem(header_a );
+	f_sync(&logFile); //sync buffer to file
+	gpx_write_progmem(footer_a );
 	f_close(&logFile);
 	return i;	
 }
+
