@@ -46,8 +46,27 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
     if (line >= (LCDHEIGHT/8))
       return;        // ran out of space :(
   }
-
 }
+
+
+void drawstring_p(uint8_t *buff, uint8_t x, uint8_t line, PGM_P loc) 
+{
+    char c;
+    while ((c = pgm_read_byte(loc++)) != 0) 
+    {
+		drawchar(buff, x, line, c);
+		
+		x += 6; // 6 pixels wide
+		if (x + 6 >= LCDWIDTH) {
+			x = 0;    // ran out of this line
+			line++;
+		}
+		if (line >= (LCDHEIGHT/8))
+		  return;        // ran out of space :(
+	}
+}
+
+
 
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
   uint8_t i =0;

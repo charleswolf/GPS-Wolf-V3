@@ -9,6 +9,9 @@ void USARTInit(int ubrr_value);
 char USARTReadChar(void);
 void USARTWriteChar(char data);
 void uart_puts(char *s);
+void uart_puts_p( const char *prg_s );
+
+#define uart_puts_P(s___) uart_puts_p(PSTR(s___))
 
 #endif //_USART_H_
 

@@ -8,10 +8,9 @@
 
 int init_sdcard( uint8_t drive );
 int sdcard_open( char * filename );
-void sdcard_close();
+void sdcard_close(void);
 int sd_check_file( char * filename );
-int kml_write_header( char * filename );
-int kml_write_footer( char * filename );
+int gpx_write_progmem( PGM_P loc );
 int sd_new_pathfile( char * filename );
 
 #endif

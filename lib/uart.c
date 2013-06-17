@@ -4,7 +4,7 @@ void USARTInit(int ubrr_value)
 {
 //ubrr=(f_osc/(16*Baud Rate))-1
 //for f_osc = 1Mhz, Baud Rate = 2400, ubrr = 25
-UBRR0H = (ubrr_value>>8);	//shift 8 bits?
+UBRR0H = (ubrr_value>>8);
 UBRR0L = ubrr_value;  //set baud rate
 // asynchronous mode, no parity, 1 stop bit, 8 bit size
 UCSR0C = (1<<UCSZ01)|(1<<UCSZ00);
@@ -32,5 +32,11 @@ void uart_puts(char *s)
 		s++;
 	}
 }
+
+void uart_puts_p( const char *prg_s )
+   {
+   unsigned char c;
+   while ( ( c = pgm_read_byte( prg_s++ ) ) ) USARTWriteChar(c);
+   } 
 
 

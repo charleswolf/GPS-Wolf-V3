@@ -104,4 +104,5 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c);
 void drawNum(uint8_t *buff, uint8_t x, uint8_t c);
 void numstring(uint8_t *buff, uint8_t x, char *c);
+void drawstring_p(uint8_t *buff, uint8_t x, uint8_t line, PGM_P loc);
 
